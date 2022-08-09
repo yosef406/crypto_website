@@ -35,7 +35,7 @@ class ViewController {
                 this.#searchContainer.hide();
                 this.#viewContainer.empty()
                     .append(this.#reportPage);
-                if (callback != null) callback();
+                if (callback != null) callback(passParam);
                 break;
 
             case this.View.ABOUT:
