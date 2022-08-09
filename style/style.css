@@ -1,0 +1,182 @@
+* {
+  margin: 0;
+  padding: 0;
+  z-index: 1;
+}
+
+body {
+  background-color: whitesmoke;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: rgb(63, 136, 57);
+  color: whitesmoke;
+  padding-left: 40px;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 0;
+}
+header img {
+  height: 80px;
+}
+
+.parallax {
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+nav input {
+  border-radius: 5px;
+  padding: 10px;
+  border: solid rgb(80, 133, 75);
+  font-size: medium;
+  margin: 5px;
+}
+
+.container {
+  max-width: 1300px;
+  width: 100%;
+}
+
+.cardHolder {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 28%;
+  margin: 1%;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px grey;
+  background-color: white;
+}
+.card h4 {
+  margin-bottom: 10px;
+}
+.card div {
+  display: flex;
+  justify-content: space-between;
+}
+@media only screen and (max-width: 810px) {
+  .card {
+    width: 45%;
+  }
+}
+@media only screen and (max-width: 706px) {
+  .card {
+    width: 40%;
+  }
+}
+@media only screen and (max-width: 500px) {
+  .card {
+    width: 90%;
+  }
+}
+
+.infoSection {
+  display: flex;
+  flex-direction: column;
+}
+.infoSection .coinInfo {
+  flex-direction: column;
+}
+
+.reportSection {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+}
+
+button {
+  padding: 10px;
+  background-color: rgb(63, 136, 57);
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: medium;
+  margin: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+button:active {
+  transform: scale(0.95);
+  background-color: rgb(46, 100, 41);
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: rgb(63, 136, 57);
+}
+
+input:checked + .slider:before {
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}/*# sourceMappingURL=style.css.map */
