@@ -138,9 +138,54 @@ nav input {
 }
 
 .reportSection {
-  display: flex;
+  display: block;
   flex-direction: column;
   padding: 15px;
+}
+
+.aboutSection {
+  min-height: 78vh;
+  padding-top: 30px;
+  width: 100%;
+  justify-content: center;
+  display: flex;
+}
+.aboutSection .page {
+  background-color: whitesmoke;
+  width: 60%;
+  padding-top: 30px;
+  padding-left: 60px;
+  padding-right: 60px;
+  padding-bottom: 60px;
+  box-shadow: 2px 2px 10px grey;
+  border-radius: 5px;
+}
+.aboutSection .page hr {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.aboutSection .page div {
+  display: flex;
+  align-items: center;
+}
+.aboutSection .page div h2 {
+  margin-right: 10px;
+}
+.aboutSection .page div h4 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+@media only screen and (max-width: 815px) {
+  .aboutSection .page {
+    width: 80%;
+  }
+}
+@media only screen and (max-width: 500px) {
+  .aboutSection .page {
+    padding-left: 20px;
+    padding-right: 20px;
+    width: 95%;
+  }
 }
 
 button {
