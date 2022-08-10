@@ -38,7 +38,7 @@ function card(coin) {
         .append(checkBox)
         .append(`<span class="slider round"></span>`);
 
-    let symbolDiv = $(`<div><h2>${coin.symbol}</h2></div>`)
+    let symbolDiv = $(`<div><h2>${coin.name}</h2></div>`)
         .append(ToggleButton);
 
     let infoBtn = $(`<button>More Info</button>`)
@@ -48,7 +48,7 @@ function card(coin) {
         .append($(`<div class="coinInfo"></div>`).hide());
 
     card.append(symbolDiv)
-        .append(`<h4>${coin.name}</h4>`)
+        .append(`<h4>${coin.symbol}</h4>`)
         .append(coinInfo);
     return card;
 }
@@ -88,12 +88,15 @@ function showCoinInfo(event) {
 }
 
 function addToReport(event) {
-    if (!reportObjects.includes(event.data.coin)) {
+    let coin = event.data.coin;
+    if (!reportObjects.includes(coin)) {
         if (reportObjects.length < 5)
-            reportObjects.push(event.data.coin);
-        else this.checked = false;
+            reportObjects.push(coin);
+        else {
+            this.checked = toggledPopUp(coin, this);
+        }
     } else {
-        let index = reportObjects.indexOf(event.data.coin);
+        let index = reportObjects.indexOf(coin);
         reportObjects.splice(index, 1);
     }
 }
@@ -146,7 +149,8 @@ function buildChart() {
 
     var dataPoints = [];
     let optionsData = [];
-    let symbolsStr = reportObjects.map((val, index) => val.symbol);
+    let symbolsStr = reportObjects.map((val) => val.symbol);
+    let nameStr = reportObjects.map((val) => val.name);
 
     for (let i = 0; i < reportObjects.length; i++) {
         dataPoints.push([]);
@@ -156,7 +160,7 @@ function buildChart() {
             yValueFormatString: "0.#####$",
             xValueFormatString: "hh:mm:ss TT",
             showInLegend: true,
-            name: symbolsStr[i],
+            name: nameStr[i],
             dataPoints: dataPoints[i],
 
         });
@@ -209,7 +213,7 @@ function buildChart() {
 
                 let result = dataPoints[i][dataPoints[i].length - 1].y;
 
-                options.data[i].legendText = `${symbolsStr[i]}: ${result} ${result == "no data" ? "" : "$"}`
+                options.data[i].legendText = `${nameStr[i]}: ${result} ${result == "no data" ? "" : "$"}`
                 if (dataPoints[i].length > 100) dataPoints[i].shift();
             }
         });
@@ -217,4 +221,32 @@ function buildChart() {
         $("#chartContainer").CanvasJSChart().render();
     }, 2000);
 
+}
+
+function buildAboutPage() {
+
+}
+
+function toggledPopUp(coin, toggleBtn) {
+    console.log("popUp " + coin.symbol);
+    let coinsWrapper = $(`<div class="coinsWrapper"></div>`)
+        .append(reportObjects.map((val, index) => {
+            return $(`<div class="reportList"><h2>${val.name}</h2><div>`)
+                .append($(`<button>remove</button>`)
+                    .click(() => {
+                        reportObjects.splice(index, 1);
+                        reportObjects.push(coin);
+                        popUp.remove();
+                        setHomeView();
+                    })
+                );
+        }))
+        .append($(`<button>Cancel</button>`).click(() => {
+            toggleBtn.checked = false;
+            popUp.remove();
+        }));
+
+    let popUp = $(`<div class="popUpAlert"></div>`)
+        .append(coinsWrapper);
+    $('body').append(popUp);
 }
