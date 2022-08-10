@@ -193,28 +193,27 @@ function buildChart() {
     let apiStr = `https://min-api.cryptocompare.com/data/pricemulti?fsyms=${symbolsStr}&tsyms=USD`;
     interval = setInterval(() => {
         let time = new Date();
-        fetch(apiStr)
-            .then((res) => res.json())
-            .then((json) => {
-                for (let i = 0; i < reportObjects.length; i++) {
-                    if (json[reportObjects[i].symbol.toUpperCase()] != undefined)
-                        dataPoints[i]
-                            .push({
-                                x: time.getTime(),
-                                y: json[reportObjects[i].symbol.toUpperCase()].USD
-                            });
-                    else dataPoints[i]
+        fetcher(apiStr, (json) => {
+            for (let i = 0; i < reportObjects.length; i++) {
+                if (json[reportObjects[i].symbol.toUpperCase()] != undefined)
+                    dataPoints[i]
                         .push({
                             x: time.getTime(),
-                            y: "no data"
+                            y: json[reportObjects[i].symbol.toUpperCase()].USD
                         });
+                else dataPoints[i]
+                    .push({
+                        x: time.getTime(),
+                        y: "no data"
+                    });
 
-                    let result = dataPoints[i][dataPoints[i].length - 1].y;
+                let result = dataPoints[i][dataPoints[i].length - 1].y;
 
-                    options.data[i].legendText = `${symbolsStr[i]}: ${result} ${result == "no data" ? "" : "$"}`
-                }
-            })
-            .catch((err) => console.log(err));
+                options.data[i].legendText = `${symbolsStr[i]}: ${result} ${result == "no data" ? "" : "$"}`
+                if (dataPoints[i].length > 100) dataPoints[i].shift();
+            }
+        });
+
         $("#chartContainer").CanvasJSChart().render();
     }, 2000);
 
