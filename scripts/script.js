@@ -21,8 +21,6 @@ $(document).ready(async () => {
     });
 
     $("#searchBtn").click(searchCoins);
-    viewController
-        .switchView(viewController.View.ABOUT, buildAboutPage)
 });
 
 function searchCoins() {
