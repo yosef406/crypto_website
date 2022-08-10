@@ -144,7 +144,6 @@ nav input {
 }
 
 .aboutSection {
-  min-height: 78vh;
   padding-top: 30px;
   width: 100%;
   justify-content: center;
@@ -257,4 +256,8 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+#masterView {
+  min-height: 78vh;
 }/*# sourceMappingURL=style.css.map */
