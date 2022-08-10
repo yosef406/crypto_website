@@ -93,7 +93,6 @@ function showCoinInfo(event) {
     let twoMinutes = 2 * 60 * 1000;
 
     if (sibling.css("display") == "none") {
-
         if (sibling.children().length != 3) {
             sibling.empty();
             if (cache == null || time - cacheObj.time > twoMinutes) {
@@ -406,7 +405,6 @@ function buildAboutPage() {
  * @param {*} toggleBtn the toggle button that was pressed it is required so the it can be checked or unchecked
  */
 function toggledPopUp(coin, toggleBtn) {
-    console.log("popUp " + coin.symbol);
     let coinsWrapper = $(`<div class="coinsWrapper"></div>`)
         .append(reportObjects.map((val, index) => {
             return $(`<div class="reportList"><h2>${val.name}</h2><div>`)
