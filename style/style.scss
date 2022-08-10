@@ -144,7 +144,7 @@ nav {
   .coinInfo {
     flex-direction: column;
 
-    div {
+    .imageDiv {
       justify-content: center;
 
       img {
@@ -152,6 +152,18 @@ nav {
         border-radius: 15px;
       }
     }
+
+  }
+}
+
+.progressBar {
+  background-color: lightgray;
+  min-width: 360px;
+  .progressIndicator {
+    justify-content: center;
+    color: white;
+    background-color: green;
+    width: 20%;
   }
 }
 
@@ -189,7 +201,8 @@ nav {
       h2 {
         margin-right: 10px;
       }
-      h4{
+
+      h4 {
         margin-top: 20px;
         margin-bottom: 10px;
       }
@@ -198,6 +211,7 @@ nav {
     @media only screen and (max-width: 815px) {
       width: 80%;
     }
+
     @media only screen and (max-width: 500px) {
       padding-left: 20px;
       padding-right: 20px;
@@ -277,6 +291,6 @@ input:checked+.slider:before {
   border-radius: 50%;
 }
 
-#masterView{
+#masterView {
   min-height: 78vh;
 }

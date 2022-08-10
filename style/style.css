@@ -129,12 +129,23 @@ nav input {
 .infoSection .coinInfo {
   flex-direction: column;
 }
-.infoSection .coinInfo div {
+.infoSection .coinInfo .imageDiv {
   justify-content: center;
 }
-.infoSection .coinInfo div img {
+.infoSection .coinInfo .imageDiv img {
   width: 100px;
   border-radius: 15px;
+}
+
+.progressBar {
+  background-color: lightgray;
+  min-width: 360px;
+}
+.progressBar .progressIndicator {
+  justify-content: center;
+  color: white;
+  background-color: green;
+  width: 20%;
 }
 
 .reportSection {

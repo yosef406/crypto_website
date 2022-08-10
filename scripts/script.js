@@ -55,15 +55,19 @@ function card(coin) {
 function showCoinInfo(event) {
     let sibling = $(this).parent().next();
     let coin = event.data.coin;
-    let loading = $("<label>loading...</label>")
+    let loading = $(`<div class="progressBar">
+                        <div id="progressIndicator" class="progressIndicator">20%</div>
+                    </div>`);
+
     if (sibling.css("display") == "none") {
 
         if (sibling.children().length != 3) {
             sibling.empty();
-            fetcher(`https://api.coingecko.com/api/v3/coins/${coin.id}`, json => {
+            fetcher(`https://api.coingecko.com/api/v3/coins/${coin.id}`, async (json) => {
+                await moveProgressBar(loading);
                 loading.remove();
                 if (json.image.large != undefined) {
-                    sibling.append(`<div><img src="${json.image.large}" alt="${coin.name}"></div>`)
+                    sibling.append(`<div class="imageDiv"><img src="${json.image.large}" alt="${coin.name}"></div>`)
                 }
                 if (json.market_data.current_price.usd != undefined) {
                     sibling.append(`<label>USD: ${json.market_data.current_price.usd}$</label>`);
@@ -83,7 +87,25 @@ function showCoinInfo(event) {
     else {
         sibling.hide();
     }
+}
 
+function moveProgressBar(loading) {
+    return new Promise((resolve, reject) => {
+        let elem = loading.children("#progressIndicator");
+        let width = 20;
+
+        let frame = () => {
+            if (width >= 100) {
+                clearInterval(id);
+                resolve();
+            } else {
+                width++;
+                elem.css("width", width + '%');
+                elem.html(width * 1 + '%');
+            }
+        }
+        let id = setInterval(frame, 10);
+    });
 }
 
 function addToReport(event) {
@@ -101,6 +123,9 @@ function addToReport(event) {
 }
 
 function setHomeView() {
+    let loading = $(`<div class="progressBar">
+                        <div id="progressIndicator" class="progressIndicator">20%</div>
+                    </div>`);
     if (coinsArr.length == 0) {
         fetcher("https://api.coingecko.com/api/v3/coins/list", (json) => {
             let count = 0;
@@ -112,11 +137,12 @@ function setHomeView() {
                 return false;
             })
         })
-            .then((res) => {
+            .then(async (res) => {
+                await moveProgressBar(loading)
                 appendCards(res);
                 coinsArr = res;
             });
-        $("#cardHolder").append(`<h1>Loading</h1>`);
+        $("#cardHolder").append($("<div><h1>Loading...</h1></div>").append(loading));
     } else {
         appendCards(coinsArr);
     }
