@@ -1,7 +1,6 @@
 * {
   margin: 0;
   padding: 0;
-  z-index: 1;
 }
 
 body {
@@ -22,7 +21,6 @@ header {
   background-color: rgb(63, 136, 57);
   color: whitesmoke;
   padding-left: 40px;
-  z-index: 0;
 }
 header img {
   height: 80px;
@@ -140,8 +138,11 @@ nav input {
 .progressBar {
   background-color: lightgray;
   min-width: 360px;
+  border-radius: 5px;
 }
 .progressBar .progressIndicator {
+  display: flex;
+  border-radius: 5px;
   justify-content: center;
   color: white;
   background-color: green;
