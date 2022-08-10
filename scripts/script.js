@@ -61,17 +61,20 @@ function showCoinInfo(event) {
 
         if (sibling.children().length != 3) {
             sibling.empty();
-            fetch(`https://api.coingecko.com/api/v3/coins/${coin.id}`)
-                .then(res => res.json()).then(json => {
-                    loading.remove();
-                    if (json.market_data.current_price.usd != undefined) {
-                        sibling.append(`<label>${json.market_data.current_price.usd}$</label>`);
-                        sibling.append(`<label>${json.market_data.current_price.eur}€</label>`);
-                        sibling.append(`<label>${json.market_data.current_price.ils}₪</label>`);
-                    } else {
-                        sibling.append(`<label>there is no data!</label>`);
-                    }
-                }).catch(err => console.log(err));
+            fetcher(`https://api.coingecko.com/api/v3/coins/${coin.id}`, json => {
+                loading.remove();
+                if (json.image.large != undefined) {
+                    sibling.append(`<div><img src="${json.image.large}" alt="${coin.name}"></div>`)
+                }
+                if (json.market_data.current_price.usd != undefined) {
+                    sibling.append(`<label>USD: ${json.market_data.current_price.usd}$</label>`);
+                    sibling.append(`<label>EUR: ${json.market_data.current_price.eur}€</label>`);
+                    sibling.append(`<label>ILS: ${json.market_data.current_price.ils}₪</label>`);
+                } else {
+                    sibling.append(`<label>there is no data!</label>`);
+                }
+
+            });
             sibling.append(loading).show();
         }
         else {
@@ -97,7 +100,16 @@ function addToReport(event) {
 
 function setHomeView() {
     if (coinsArr.length == 0) {
-        fetcher("https://api.coingecko.com/api/v3/coins/list")
+        fetcher("https://api.coingecko.com/api/v3/coins/list", (json) => {
+            let count = 0;
+            return json.filter((val, index) => {
+                if (val.name.length < 10 && index % 15 == 0 && count < 100) {
+                    count++;
+                    return true;
+                }
+                return false;
+            })
+        })
             .then((res) => {
                 appendCards(res);
                 coinsArr = res;
@@ -115,18 +127,9 @@ function appendCards(coins) {
     });
 }
 
-async function fetcher(api) {
+async function fetcher(api, jsonCallback) {
     return await fetch(api)
-        .then((res) => res.json()).then((json) => {
-            let count = 0;
-            return json.filter((val, index) => {
-                if (val.name.length < 10 && index % 15 == 0 && count < 100) {
-                    count++;
-                    return true;
-                }
-                return false;
-            })
-        })
+        .then((res) => res.json()).then(jsonCallback)
         .catch((err) => console.log(err));
 }
 
