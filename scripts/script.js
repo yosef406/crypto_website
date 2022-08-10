@@ -223,7 +223,7 @@ function buildChart() {
 }
 
 function buildAboutPage() {
-    let aboutSection = $(`#aboutSection`);
+    let aboutSection = $(`#aboutSection`).empty();
     let page = $(`<div class="page"></div>`)
         .append(`<h1>About Us</h1>`).append(`<hr>`)
         .append(`<div> <h2>Creator: </h2> <h3> Yosef Awad</h3> </div>`)
