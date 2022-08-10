@@ -22,9 +22,6 @@ header {
   background-color: rgb(63, 136, 57);
   color: whitesmoke;
   padding-left: 40px;
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
   z-index: 0;
 }
 header img {
@@ -32,6 +29,7 @@ header img {
 }
 
 .parallax {
+  background-image: url("https://assets.iflscience.com/assets/articleNo/34286/aImg/10679/1464385754-226-scientists-still-can-t-make-kryptonite-but-they-ve-made-something-pretty-close-l.jpg");
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
@@ -101,6 +99,13 @@ nav input {
 }
 .infoSection .coinInfo {
   flex-direction: column;
+}
+.infoSection .coinInfo div {
+  justify-content: center;
+}
+.infoSection .coinInfo div img {
+  width: 100px;
+  border-radius: 15px;
 }
 
 .reportSection {
@@ -172,7 +177,6 @@ input:checked + .slider:before {
   transform: translateX(26px);
 }
 
-/* Rounded sliders */
 .slider.round {
   border-radius: 34px;
 }
