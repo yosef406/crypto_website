@@ -1,10 +1,17 @@
 
+/**
+ * @param {*} coinsArr the coins that have been fetched from the API and are on the home page
+ * @param {*} reportObjects the list of coins that are supposed to be added to the live report chart
+ * @param {*} viewController a class that controls the navigation
+ * @param {*} interval this is the interval that is used in the chart function it is used to stop the function when navigating to another page
+ */
 var coinsArr = [];
 let reportObjects = [];
 let viewController = new ViewController(setHomeView);
 let interval;
 
 $(document).ready(async () => {
+
     $("#homeBtn").click(() => {
         clearInterval(interval);
         viewController
@@ -23,12 +30,22 @@ $(document).ready(async () => {
     $("#searchBtn").click(searchCoins);
 });
 
+/**
+ * searches threw the coins to find coins that includes 
+ * the string that is in the search bar
+ */
 function searchCoins() {
     appendCards(coinsArr
         .filter((val) => val.name.toUpperCase().includes($("#searchInp").val().toUpperCase()))
     );
 }
 
+/**
+ * builds a card that includes the name, symbol and the controls buttons for each coin
+ * and it includes the sections for additional info or a loading bar
+ * @param {*} coin the coin to build the card for
+ * @returns the card that was built 
+ */
 function card(coin) {
     let card = $(`<div class="card"></div>`);
     let checkBox = $(`<input type="checkbox" ${reportObjects.includes(coin) ? "checked" : ""} >`).change({ coin }, addToReport)
@@ -52,6 +69,14 @@ function card(coin) {
     return card;
 }
 
+/**
+ * this function is used only threw a button (the more info button) on each coin card
+ * this function checks the session storage for stored info about the coin
+ * if there are no info in the session storage or the info was stored over two minutes ago
+ * the function will fetch the info from an api and store it in the session storage
+ * then the info will be added to the card that contains the button that ran the function
+ * @param {*} event a jQuery click event that holds info about the button
+ */
 function showCoinInfo(event) {
     let sibling = $(this).parent().next();
     let coin = event.data.coin;
@@ -100,6 +125,11 @@ function showCoinInfo(event) {
     }
 }
 
+/**
+ * this function appends the coin info that was fetched in the showCoinInfo function
+ * @param {*} obj the object that holds the info
+ * @param {*} sibling the <div> where to add the info
+ */
 function infoAppend(obj, sibling) {
     sibling.append(`<div class="imageDiv"><img src="${obj.img}" alt="image not found"></div>`)
     if (obj.usd != undefined && obj.eur != undefined && obj.ils != undefined) {
@@ -112,6 +142,11 @@ function infoAppend(obj, sibling) {
     }
 }
 
+/**
+ * this function is used to animate the progress bar for loading
+ * @param {*} loading the progress bar element 
+ * @returns a promise that resolves when the progress bar reaches 100%
+ */
 function moveProgressBar(loading) {
     return new Promise((resolve, reject) => {
         let elem = loading.children("#progressIndicator");
@@ -131,6 +166,11 @@ function moveProgressBar(loading) {
     });
 }
 
+
+/**
+ * adds a coin to the reportObjects array that is used to display the report chart
+ * @param {*} event a jQuery click event that holds info about the button
+ */
 function addToReport(event) {
     let coin = event.data.coin;
     if (!reportObjects.includes(coin)) {
@@ -145,6 +185,10 @@ function addToReport(event) {
     }
 }
 
+/**
+ * fetches the coins list from the API and filters the results
+ * then uses the appendCards function to populate the home page
+ */
 function setHomeView() {
     let loading = $(`<div class="progressBar">
                         <div id="progressIndicator" class="progressIndicator">20%</div>
@@ -171,6 +215,10 @@ function setHomeView() {
     }
 }
 
+/**
+ * appends the coins cards to the home page
+ * @param {*} coins the list of coins to add to the home page
+ */
 function appendCards(coins) {
     $("#cardHolder").empty();
     coins.map((val) => {
@@ -178,13 +226,24 @@ function appendCards(coins) {
     });
 }
 
+/**
+ * fetches data from a given API 
+ * @param {*} api the API to fetch from
+ * @param {*} jsonCallback a function to run when the data is returned from the json() function
+ * @returns the fetch function
+ */
 async function fetcher(api, jsonCallback) {
     return await fetch(api)
         .then((res) => res.json()).then(jsonCallback)
         .catch((err) => console.log(err));
 }
 
-
+/**
+ * builds the live report chart 
+ * this is an edited version of the function given from https://canvasjs.com/jquery-charts/
+ * this function checks reportObjects for the coins to build the chart for
+ * then it sets an interval function that fires every two seconds to fetch the data and display it 
+ */
 function buildChart() {
     if (reportObjects.length < 1) {
         $("#chartWarning").show();
@@ -271,6 +330,9 @@ function buildChart() {
 
 }
 
+/**
+ * builds the about page and appends all the headers and paragraphs
+ */
 function buildAboutPage() {
     let aboutSection = $(`#aboutSection`).empty();
     let page = $(`<div class="page"></div>`)
@@ -335,6 +397,14 @@ function buildAboutPage() {
     aboutSection.append(page);
 }
 
+/**
+ * creates a popup window that is created when there are five coins in reportObjects and the user attempts to add a sixth one
+ * it displays all the coins that have ben added 
+ * if the user cancels the coin that was pressed will not be added and the popup will be removed 
+ * if the user decides to remove a coin from the list the coin that was pressed will be added instead
+ * @param {*} coin the coin that the user attempted to add
+ * @param {*} toggleBtn the toggle button that was pressed it is required so the it can be checked or unchecked
+ */
 function toggledPopUp(coin, toggleBtn) {
     console.log("popUp " + coin.symbol);
     let coinsWrapper = $(`<div class="coinsWrapper"></div>`)
