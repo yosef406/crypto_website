@@ -58,27 +58,38 @@ function showCoinInfo(event) {
     let loading = $(`<div class="progressBar">
                         <div id="progressIndicator" class="progressIndicator">20%</div>
                     </div>`);
+    let cache = sessionStorage.getItem(coin.id);
+    let cacheObj = {};
+    if (cache) {
+        cacheObj = JSON.parse(sessionStorage.getItem(coin.id));
+    }
+
+    let time = Date.now();
+    let twoMinutes = 2 * 60 * 1000;
 
     if (sibling.css("display") == "none") {
 
         if (sibling.children().length != 3) {
             sibling.empty();
-            fetcher(`https://api.coingecko.com/api/v3/coins/${coin.id}`, async (json) => {
-                await moveProgressBar(loading);
-                loading.remove();
-                if (json.image.large != undefined) {
-                    sibling.append(`<div class="imageDiv"><img src="${json.image.large}" alt="${coin.name}"></div>`)
-                }
-                if (json.market_data.current_price.usd != undefined) {
-                    sibling.append(`<label>USD: ${json.market_data.current_price.usd}$</label>`);
-                    sibling.append(`<label>EUR: ${json.market_data.current_price.eur}€</label>`);
-                    sibling.append(`<label>ILS: ${json.market_data.current_price.ils}₪</label>`);
-                } else {
-                    sibling.append(`<label>there is no data!</label>`);
-                }
+            if (cache == null || time - cacheObj.time > twoMinutes) {
+                fetcher(`https://api.coingecko.com/api/v3/coins/${coin.id}`, async (json) => {
+                    await moveProgressBar(loading);
+                    loading.remove();
 
-            });
-            sibling.append(loading).show();
+                    cacheObj.img = json.image.large;
+                    cacheObj.usd = json.market_data.current_price.usd;
+                    cacheObj.eur = json.market_data.current_price.eur;
+                    cacheObj.ils = json.market_data.current_price.ils;
+                    cacheObj.time = time;
+                    infoAppend(cacheObj, sibling);
+                    sessionStorage.setItem(coin.id, JSON.stringify(cacheObj))
+                });
+                sibling.append(loading).show();
+            }
+            else {
+                infoAppend(cacheObj, sibling);
+                sibling.show();
+            }
         }
         else {
             sibling.show();
@@ -86,6 +97,18 @@ function showCoinInfo(event) {
     }
     else {
         sibling.hide();
+    }
+}
+
+function infoAppend(obj, sibling) {
+    sibling.append(`<div class="imageDiv"><img src="${obj.img}" alt="image not found"></div>`)
+    if (obj.usd != undefined && obj.eur != undefined && obj.ils != undefined) {
+        sibling.append(`<label>USD: ${obj.usd}$</label>`);
+        sibling.append(`<label>EUR: ${obj.eur}€</label>`);
+        sibling.append(`<label>ILS: ${obj.ils}₪</label>`);
+    }
+    else {
+        sibling.append(`<label>there is no data!</label>`);
     }
 }
 
